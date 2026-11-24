@@ -1,4 +1,5 @@
 """SQLite inventory for the synthetic Meridian Hall season archive."""
+from contextlib import closing
 from pathlib import Path
 from datetime import date, timedelta
 import sqlite3
@@ -8,6 +9,7 @@ DB = Path(__file__).parent / '.data' / 'venue.sqlite3'
 ROWS, WIDTH, SHOWS = 400, 28, 512
 SHOW_NAMES = ('Neon Atlas', 'Velvet Current', 'The Static Hours')
 SEAT_QUERY = 'SELECT row_num, seat_num, booked FROM seats WHERE show_id = ? ORDER BY rowid'
+SHOW_INDEX = 'CREATE INDEX IF NOT EXISTS seats_show_id ON seats(show_id)'
 
 
 def prepare(path=DB, count=SHOWS):
@@ -34,9 +36,13 @@ def prepare(path=DB, count=SHOWS):
                         CASE WHEN pos = ? THEN 0 ELSE
                         ((pos * 83 + id * 137 + pos * pos * 7) % 157) < 49 END
                     FROM shows CROSS JOIN positions''', (ROWS*WIDTH, WIDTH, WIDTH, WIDTH+11))
+                    db.execute(SHOW_INDEX)
             finally:
                 db.close()
             new.replace(path)
+    else:
+        with closing(sqlite3.connect(path)) as db, db:
+            db.execute(SHOW_INDEX)
 
 
 def shows(db):

@@ -31,6 +31,9 @@ h2 { font-weight:680; letter-spacing:-.045em; font-size:28px; margin:2px 0}
 #view { max-height:43vh; min-height:175px; overflow:auto; scrollbar-color:#626a80 transparent; scrollbar-gutter:stable; overscroll-behavior:contain}
 #view:focus-visible,select:focus-visible,.seat:focus-visible { outline:2px solid white; outline-offset:1px}
 #map { min-width:646px; padding:4px}
+@supports (content-visibility:hidden) {
+  #map[hidden] { display:block; content-visibility:hidden}
+}
 .row { display:grid; grid-template-columns:26px repeat(28,minmax(0,1fr)); gap:2px; align-items:center; margin:0 0 4px}
 .row-label { font:700 11px ui-monospace,monospace; color:var(--dim); position:sticky; left:0; background:var(--panel); z-index:1}
 .seat { min-width:0; padding:0; font:650 12px/1.1 ui-monospace,monospace; background:var(--seat); color:#d6ffed; border:1px solid #659080; border-radius:5px 5px 2px 2px; height:27px; cursor:pointer}
