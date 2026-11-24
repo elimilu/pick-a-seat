@@ -17,7 +17,22 @@ function renderSelection() {
   byId('picks').textContent = selected.size ? [...selected].join(' · ') : 'Tap an available seat to select it.';
 }
 
-function renderMap() {
+function setAvailability(button, booked) {
+  button.disabled = Boolean(booked);
+  button.setAttribute('aria-label', `Seat ${button.dataset.seat}${booked ? ', booked' : ''}`);
+}
+
+function renderMap(rows) {
+  if (rows.length === inventory.length &&
+      rows.every(([r, n], i) => r === inventory[i][0] && n === inventory[i][1])) {
+    const buttons = map.querySelectorAll('.seat');
+    rows.forEach(([, , booked], i) => {
+      if (booked !== inventory[i][2]) setAvailability(buttons[i], booked);
+    });
+    inventory = rows;
+    return;
+  }
+  inventory = rows;
   const fragment = document.createDocumentFragment();
   let row, lastRow, label, prefix;
   for (const [r, number, booked] of inventory) {
@@ -34,9 +49,8 @@ function renderMap() {
     }
     const id = prefix + label + number, button = document.createElement('button');
     button.type = 'button'; button.className = 'seat'; button.textContent = number;
-    button.dataset.seat = id; button.disabled = Boolean(booked);
-    button.setAttribute('aria-label', `Seat ${id}${booked ? ', booked' : ''}`);
-    button.setAttribute('aria-pressed', String(selected.has(id)));
+    button.dataset.seat = id; setAvailability(button, booked);
+    button.setAttribute('aria-pressed', 'false');
     row.append(button);
   }
   map.replaceChildren(fragment);
@@ -56,7 +70,9 @@ async function loadShow() {
   request?.abort();
   const controller = new AbortController(); request = controller;
   const concert = concerts.find(s => s.id === Number(show.value));
-  selected = new Set(); inventory = []; map.replaceChildren(); renderSelection();
+  map.hidden = true;
+  for (const button of map.querySelectorAll('[aria-pressed="true"]')) button.setAttribute('aria-pressed', 'false');
+  selected.clear(); renderSelection();
   byId('act').textContent = concert.title;
   byId('date').textContent = new Intl.DateTimeFormat('en-US', {dateStyle:'full',timeZone:'UTC'}).format(new Date(concert.night+'T12:00:00Z'));
   byId('status').textContent = 'Loading seat map…';
@@ -65,7 +81,7 @@ async function loadShow() {
     if (!response.ok) throw new Error();
     const rows = await response.json();
     if (controller.signal.aborted) return;
-    inventory = rows; renderMap(); view.scrollTo(0,0); byId('status').textContent = '';
+    renderMap(rows); map.hidden = false; view.scrollTo(0,0); byId('status').textContent = '';
   } catch (error) {
     if (error.name !== 'AbortError') byId('status').textContent = 'Could not load seats. Switch shows to retry.';
   }

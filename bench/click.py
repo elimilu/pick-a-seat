@@ -27,9 +27,12 @@ with sync_playwright() as pw:
     assert target.is_enabled()
     # Exercise show switching independently of the timed, network-free click path.
     for show in ['2', '1']:
-        with page.expect_response(lambda r: r.url.endswith('/shows/' + show + '/seats') and r.ok):
+        with page.expect_response(lambda r: r.url.endswith('/shows/' + show + '/seats') and r.ok) as inventory:
             page.locator('#show').select_option(show)
         target.wait_for()
+        expected = [bool(booked) for _, _, booked in inventory.value.json()]
+        actual = page.locator('button.seat').evaluate_all('(seats) => seats.map(seat => seat.disabled)')
+        assert actual == expected, 'Seat availability differs from the selected show'
         assert page.locator('#count').inner_text() == '0'
     assert page.locator('#act').inner_text() == 'Neon Atlas'
     assert page.locator('button.seat:disabled').count() > 0
