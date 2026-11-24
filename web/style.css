@@ -1,0 +1,68 @@
+:root { color-scheme:dark; --bg:#121521; --panel:#191e2c; --edge:#363c50; --dim:#adb3c7; --mint:#9ff8d5; --amber:#ffba7a; --seat:#3b665c; --sold:#363949; --paper:#ffe1bc; color:#f5f4ee; background:var(--bg); font-family:system-ui,sans-serif}
+* { box-sizing:border-box}
+body { margin:0}
+header,footer { display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--edge); padding:14px max(4vw,20px)}
+.brand { display:flex; align-items:center; gap:10px; font-weight:750; font-size:20px; letter-spacing:-.055em}
+.mark { display:grid; place-items:center; background:var(--mint); color:var(--bg); width:30px; height:30px; border-radius:50%; font-size:24px}
+.eyebrow,.kicker,.show-label,small,footer,.map-foot,.stage { font:700 11px/1.4 ui-monospace,monospace; letter-spacing:.1em}
+.edition b { color:var(--mint); margin:0 5px}
+main { max-width:1600px; margin:auto; padding:30px max(4vw,20px)}
+.intro,.section-head,.legend,.stub { display:flex; align-items:center; justify-content:space-between; gap:16px}
+.kicker { color:var(--mint); display:flex; align-items:center; gap:9px}
+.kicker span { height:2px; width:24px; background:currentColor}
+h1 { font:italic 700 clamp(52px,6.2vw,95px)/.99 Georgia,serif; letter-spacing:-.065em; margin:8px 0}
+h1 span { color:var(--amber)}
+.intro p,.note,.map-foot,#status { color:var(--dim)}
+.intro p { margin:0 0 7px; font-size:16px}
+.show-label { color:var(--dim); min-width:225px}
+select { display:block; margin-top:8px; padding:11px 14px; width:100%; border-radius:7px; border:1px solid #586078; background:var(--panel); color:white; font:650 15px system-ui}
+.layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(230px,23%); gap:20px; margin-top:25px}
+.floor { min-width:0; background:var(--panel); border:1px solid var(--edge); border-radius:14px; padding:20px}
+.section-head { flex-wrap:wrap}
+.eyebrow { color:var(--dim)}
+h2 { font-weight:680; letter-spacing:-.045em; font-size:28px; margin:2px 0}
+.legend { justify-content:flex-start; flex-wrap:wrap; gap:12px; font-size:12px; color:#d4d8e3}
+.legend span { display:flex; align-items:center; gap:5px}
+.legend i { background:var(--seat); border:1px solid #80b9a3; width:12px; height:12px; border-radius:3px}
+.legend .taken { background:var(--sold); border-color:#55576a}
+.legend .chosen { background:var(--amber); border-color:var(--amber)}
+.stage { display:flex; justify-content:center; align-items:center; gap:22px; margin:15px 10% 12px; border-top:3px solid #a2a9cc; border-radius:50% 50% 0 0; padding:7px 0; color:#ccd2ed; letter-spacing:.34em; background:linear-gradient(#32384e,transparent)}
+.stage span { font-size:6px}
+#view { max-height:43vh; min-height:175px; overflow:auto; scrollbar-color:#626a80 transparent; scrollbar-gutter:stable; overscroll-behavior:contain}
+#view:focus-visible,select:focus-visible,.seat:focus-visible { outline:2px solid white; outline-offset:1px}
+#map { min-width:646px; padding:4px}
+.row { display:grid; grid-template-columns:26px repeat(28,minmax(0,1fr)); gap:2px; align-items:center; margin:0 0 4px}
+.row-label { font:700 11px ui-monospace,monospace; color:var(--dim); position:sticky; left:0; background:var(--panel); z-index:1}
+.seat { min-width:0; padding:0; font:650 12px/1.1 ui-monospace,monospace; background:var(--seat); color:#d6ffed; border:1px solid #659080; border-radius:5px 5px 2px 2px; height:27px; cursor:pointer}
+.seat:disabled { background:var(--sold); color:#a7aabc; border-color:#4d5163; cursor:not-allowed}
+.seat[aria-pressed=true] { background:var(--amber); border-color:var(--amber); color:#231710}
+.seat:enabled:hover { border-color:white}
+.map-foot { margin:12px 0 0; font-size:10px; letter-spacing:.035em}
+.map-foot span { color:var(--mint)}
+#status:empty { display:none}
+aside { min-width:0}
+.ticket { position:relative; background:var(--paper); color:#352b27; padding:22px; border-radius:14px}
+.ticket .eyebrow { color:#67554a}
+.ticket h2 { font:italic 700 34px/1.07 Georgia,serif; margin:16px 0 5px}
+.ticket p { font-size:14px; margin:3px 0 18px}
+.stub { border-top:1px dashed #a38b72; padding-top:15px}
+.stub output { font:700 40px/1.1 ui-monospace,monospace}
+#picks { overflow-wrap:anywhere; margin:12px 0 24px}
+.barcode { width:100%; height:25px; background:repeating-linear-gradient(90deg,#352b27 0 2px,transparent 2px 4px,#352b27 4px 5px,transparent 5px 9px,#352b27 9px 14px,transparent 14px 17px)}
+small { font-size:9px}
+.note { font-size:12px; text-align:center}
+footer { border:0; border-top:1px solid var(--edge); font-size:10px; color:var(--dim)}
+@media(max-width:760px) { main { padding:19px 14px}
+.edition { font-size:9px}
+.intro { display:block}
+.show-label { display:block; margin-top:14px}
+.layout { grid-template-columns:1fr; margin-top:14px; gap:12px}
+.floor { padding:12px}
+.ticket { padding:14px}
+.ticket h2 { margin-top:6px}
+.barcode,.note { display:none}
+.ticket p,#picks { margin-bottom:8px}
+#view { max-height:36vh}
+}
+
+.section-label { margin: 4px 0 7px; font: 700 11px/1.4 ui-monospace, monospace; letter-spacing: .09em; text-transform: uppercase; color: var(--mint); }
