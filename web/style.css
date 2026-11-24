@@ -34,7 +34,9 @@ h2 { font-weight:680; letter-spacing:-.045em; font-size:28px; margin:2px 0}
 @supports (content-visibility:hidden) {
   #map[hidden] { display:block; content-visibility:hidden}
 }
-.row { display:grid; grid-template-columns:26px repeat(28,minmax(0,1fr)); gap:2px; align-items:center; margin:0 0 4px}
+.row { display:grid; grid-template-columns:26px repeat(28,minmax(0,1fr)); gap:2px; align-items:center; margin:0 0 4px;
+  /* Reserve a seat's height offscreen and leave room for its focus outline. */
+  content-visibility:auto; contain-intrinsic-block-size:auto 27px; overflow-clip-margin:3px}
 .row-label { font:700 11px ui-monospace,monospace; color:var(--dim); position:sticky; left:0; background:var(--panel); z-index:1}
 .seat { min-width:0; padding:0; font:650 12px/1.1 ui-monospace,monospace; background:var(--seat); color:#d6ffed; border:1px solid #659080; border-radius:5px 5px 2px 2px; height:27px; cursor:pointer}
 .seat:disabled { background:var(--sold); color:#a7aabc; border-color:#4d5163; cursor:not-allowed}
