@@ -1,4 +1,5 @@
 """SQLite inventory for the synthetic Meridian Hall season archive."""
+from contextlib import closing
 from pathlib import Path
 from datetime import date, timedelta
 import sqlite3
@@ -37,6 +38,9 @@ def prepare(path=DB, count=SHOWS):
             finally:
                 db.close()
             new.replace(path)
+    # Also upgrades databases seeded before the index existed.
+    with closing(sqlite3.connect(path)) as db, db:
+        db.execute('CREATE INDEX IF NOT EXISTS seats_by_show ON seats(show_id)')
 
 
 def shows(db):
