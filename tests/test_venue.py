@@ -23,6 +23,19 @@ class InventoryTest(unittest.TestCase):
                 self.assertNotEqual(rows, venue.seats(db, 2))
                 self.assertEqual(venue.seats(db, 10), [])
 
+    def test_seat_lookup_uses_index_on_existing_database(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'venue.db'
+            venue.prepare(path, count=4)
+            with closing(sqlite3.connect(path)) as db, db:
+                expected = venue.seats(db, 1)
+                db.execute('DROP INDEX seats_by_show')
+            venue.prepare(path, count=4)
+            with closing(sqlite3.connect(path)) as db:
+                plan = [r[3] for r in db.execute('EXPLAIN QUERY PLAN ' + venue.SEAT_QUERY, (1,))]
+                self.assertEqual(plan, ['SEARCH seats USING INDEX seats_by_show (show_id=?)'])
+                self.assertEqual(venue.seats(db, 1), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
