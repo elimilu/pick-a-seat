@@ -47,9 +47,9 @@ map.addEventListener('click', event => {
   if (!button || button.disabled) return;
   const id = button.dataset.seat;
   if (selected.has(id)) selected.delete(id); else selected.add(id);
-  renderMap();
+  button.setAttribute('aria-pressed', String(selected.has(id)));
   renderSelection();
-  map.querySelector(`[data-seat="${id}"]`).focus({preventScroll:true});
+  button.focus({preventScroll:true});
 });
 
 async function loadShow() {
